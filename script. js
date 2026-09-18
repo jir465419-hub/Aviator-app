@@ -1,0 +1,221 @@
+let balance = 1000;
+
+let multiplier = 1.00;
+
+let running = false;
+
+let hasBet = false;
+
+let betAmount = 0;
+
+let crashPoint = 0;
+
+let timer;
+
+
+const balanceEl = document.getElementById("balance");
+
+const multiplierEl = document.getElementById("multiplier");
+
+const planeEl = document.getElementById("plane");
+
+const statusEl = document.getElementById("status");
+
+const betBtn = document.getElementById("betBtn");
+
+const cashoutBtn = document.getElementById("cashoutBtn");
+
+const betInput = document.getElementById("betAmount");
+
+
+// Start a new round
+
+function startRound() {
+
+    running = false;
+
+    hasBet = false;
+
+    multiplier = 1.00;
+
+    multiplierEl.textContent = "1.00x";
+
+    planeEl.style.left = "25%";
+
+    planeEl.style.bottom = "70px";
+
+    statusEl.textContent = "ROUND STARTING...";
+
+    betBtn.disabled = false;
+
+    cashoutBtn.disabled = true;
+
+
+    // Demo crash point
+
+    crashPoint = 1.20 + Math.random() * 5.00;
+
+
+    setTimeout(() => {
+
+        running = true;
+
+        statusEl.textContent = "FLYING...";
+
+        betBtn.disabled = false;
+
+        runGame();
+
+    }, 2000);
+
+}
+
+
+// Game loop
+
+function runGame() {
+
+    timer = setInterval(() => {
+
+        if (!running) return;
+
+        multiplier += 0.01;
+
+        multiplier = Number(multiplier.toFixed(2));
+
+        multiplierEl.textContent = multiplier.toFixed(2) + "x";
+
+
+        let progress = Math.min(
+            (multiplier - 1) / 5,
+            1
+        );
+
+        planeEl.style.left =
+            (25 + progress * 65) + "%";
+
+        planeEl.style.bottom =
+            (70 + progress * 180) + "px";
+
+
+        if (multiplier >= crashPoint) {
+
+            crash();
+
+        }
+
+    }, 100);
+
+}
+
+
+// Place demo bet
+
+betBtn.addEventListener("click", () => {
+
+    if (!running) {
+
+        alert("Round अभी शुरू नहीं हुआ है।");
+
+        return;
+
+    }
+
+    if (hasBet) return;
+
+
+    betAmount = Number(betInput.value);
+
+
+    if (betAmount <= 0) {
+
+        alert("Bet amount सही डालें।");
+
+        return;
+
+    }
+
+
+    if (betAmount > balance) {
+
+        alert("Demo balance पर्याप्त नहीं है।");
+
+        return;
+
+    }
+
+
+    balance -= betAmount;
+
+    balanceEl.textContent = balance.toFixed(2);
+
+    hasBet = true;
+
+    cashoutBtn.disabled = false;
+
+    betBtn.disabled = true;
+
+    statusEl.textContent =
+        "BET PLACED: ₹" + betAmount;
+
+});
+
+
+// Cash out
+
+cashoutBtn.addEventListener("click", () => {
+
+    if (!hasBet || !running) return;
+
+
+    let winnings = betAmount * multiplier;
+
+    balance += winnings;
+
+    balanceEl.textContent = balance.toFixed(2);
+
+
+    statusEl.textContent =
+        "CASHED OUT: ₹" + winnings.toFixed(2);
+
+
+    hasBet = false;
+
+    cashoutBtn.disabled = true;
+
+});
+
+
+// Crash
+
+function crash() {
+
+    running = false;
+
+    clearInterval(timer);
+
+    multiplierEl.textContent =
+        multiplier.toFixed(2) + "x";
+
+    statusEl.textContent =
+        "💥 CRASHED AT " +
+        multiplier.toFixed(2) + "x";
+
+
+    if (hasBet) {
+
+        hasBet = false;
+
+        cashoutBtn.disabled = true;
+
+    }
+
+
+    setTimeout(startRound, 3000);
+
+}
+
+
+// Start
+
+startRound();
