@@ -1,10 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-    <title>Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator Demo</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h1>AVIATOR TEST</h1>
-    <p>Preview working!</p>
+
+<header>
+    <div class="logo">✈️ AVIATOR</div>
+    <div class="balance">
+        Demo Balance: ₹<span id="balance">1000.00</span>
+    </div>
+</header>
+
+<main>
+
+    <section class="game-box">
+
+        <div class="multiplier" id="multiplier">1.00x</div>
+
+        <div class="plane" id="plane">✈️</div>
+
+        <div class="status" id="status">
+            ROUND STARTING...
+        </div>
+
+    </section>
+
+    <section class="controls">
+
+        <div class="bet-input">
+            <label for="betAmount">Bet Amount</label>
+            <input
+                type="number"
+                id="betAmount"
+                value="10"
+                min="1"
+                step="1"
+            >
+        </div>
+
+        <button class="bet-btn" id="betBtn">
+            BET
+        </button>
+
+        <button class="cashout-btn" id="cashoutBtn" disabled>
+            CASH OUT
+        </button>
+
+    </section>
+
+    <section class="history">
+        <h3>Previous Rounds</h3>
+
+        <div id="historyList">
+            <span>1.42x</span>
+            <span>2.15x</span>
+            <span>1.08x</span>
+            <span>5.31x</span>
+        </div>
+    </section>
+
+</main>
+
+<script src="script.js"></script>
+
 </body>
 </html>
