@@ -13,11 +13,9 @@ body {
 header {
     height: 65px;
     background: #111522;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 0 18px;
 }
 
@@ -34,14 +32,16 @@ header {
 .game-box {
     margin: 15px;
     height: 380px;
-
     border-radius: 15px;
 
     background:
-        radial-gradient(circle at center, #24152e, #090b12 70%);
+        radial-gradient(
+            circle at center,
+            #24152e,
+            #090b12 70%
+        );
 
     position: relative;
-
     overflow: hidden;
 
     display: flex;
@@ -52,12 +52,10 @@ header {
 .multiplier {
     font-size: 52px;
     font-weight: bold;
-
-    color: #fff;
+    color: white;
 
     position: absolute;
     top: 125px;
-
     z-index: 2;
 }
 
@@ -69,7 +67,9 @@ header {
 
     font-size: 45px;
 
-    transition: all 0.1s linear;
+    transition:
+        left 0.1s linear,
+        bottom 0.1s linear;
 }
 
 .status {
@@ -84,9 +84,7 @@ header {
     padding: 15px;
 
     display: grid;
-
     grid-template-columns: 1fr 1fr;
-
     gap: 10px;
 }
 
@@ -96,9 +94,7 @@ header {
 
 .bet-input label {
     display: block;
-
     margin-bottom: 6px;
-
     color: #aaa;
 }
 
@@ -119,7 +115,6 @@ input {
 
 button {
     border: none;
-
     padding: 16px;
 
     border-radius: 10px;
@@ -127,7 +122,6 @@ button {
     color: white;
 
     font-size: 17px;
-
     font-weight: bold;
 
     cursor: pointer;
@@ -147,11 +141,9 @@ button:disabled {
 
 .history {
     margin: 10px 15px;
-
     padding: 15px;
 
     background: #111522;
-
     border-radius: 12px;
 }
 
@@ -161,9 +153,7 @@ button:disabled {
 
 #historyList {
     display: flex;
-
     gap: 8px;
-
     flex-wrap: wrap;
 }
 
