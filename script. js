@@ -10,44 +10,30 @@ let betAmount = 0;
 
 let crashPoint = 0;
 
-let timer = null;
-
-const balanceEl =
-    document.getElementById("balance");
-
-const multiplierEl =
-    document.getElementById("multiplier");
-
-const planeEl =
-    document.getElementById("plane");
-
-const statusEl =
-    document.getElementById("status");
-
-const betBtn =
-    document.getElementById("betBtn");
-
-const cashoutBtn =
-    document.getElementById("cashoutBtn");
-
-const betInput =
-    document.getElementById("betAmount");
+let timer;
 
 
-function updateBalance() {
-    balanceEl.textContent =
-        balance.toFixed(2);
-}
+const balanceEl = document.getElementById("balance");
 
+const multiplierEl = document.getElementById("multiplier");
+
+const planeEl = document.getElementById("plane");
+
+const statusEl = document.getElementById("status");
+
+const betBtn = document.getElementById("betBtn");
+
+const cashoutBtn = document.getElementById("cashoutBtn");
+
+const betInput = document.getElementById("betAmount");
+
+
+// Start a new round
 
 function startRound() {
 
-    if (timer) {
-        clearInterval(timer);
-        timer = null;
-    }
-
     running = false;
+
     hasBet = false;
 
     multiplier = 1.00;
@@ -55,30 +41,37 @@ function startRound() {
     multiplierEl.textContent = "1.00x";
 
     planeEl.style.left = "25%";
+
     planeEl.style.bottom = "70px";
 
-    statusEl.textContent =
-        "ROUND STARTING...";
+    statusEl.textContent = "ROUND STARTING...";
 
     betBtn.disabled = false;
+
     cashoutBtn.disabled = true;
 
-    // Demo-only random crash point
-    crashPoint =
-        1.20 + Math.random() * 5.00;
+
+    // Demo crash point
+
+    crashPoint = 1.20 + Math.random() * 5.00;
+
 
     setTimeout(() => {
 
         running = true;
 
-        statusEl.textContent =
-            "FLYING...";
+        statusEl.textContent = "FLYING...";
+
+        betBtn.disabled = false;
 
         runGame();
 
     }, 2000);
+
 }
 
+
+// Game loop
 
 function runGame() {
 
@@ -88,80 +81,73 @@ function runGame() {
 
         multiplier += 0.01;
 
-        multiplier =
-            Number(multiplier.toFixed(2));
+        multiplier = Number(multiplier.toFixed(2));
 
-        multiplierEl.textContent =
-            multiplier.toFixed(2) + "x";
+        multiplierEl.textContent = multiplier.toFixed(2) + "x";
 
 
-        const progress =
-            Math.min(
-                (multiplier - 1) / 5,
-                1
-            );
-
+        let progress = Math.min(
+            (multiplier - 1) / 5,
+            1
+        );
 
         planeEl.style.left =
             (25 + progress * 65) + "%";
-
 
         planeEl.style.bottom =
             (70 + progress * 180) + "px";
 
 
         if (multiplier >= crashPoint) {
+
             crash();
+
         }
 
     }, 100);
+
 }
 
+
+// Place demo bet
 
 betBtn.addEventListener("click", () => {
 
     if (!running) {
 
-        alert(
-            "Round अभी शुरू नहीं हुआ है।"
-        );
+        alert("Round अभी शुरू नहीं हुआ है।");
 
         return;
+
     }
 
     if (hasBet) return;
 
 
-    betAmount =
-        Number(betInput.value);
+    betAmount = Number(betInput.value);
 
 
-    if (
-        !Number.isFinite(betAmount) ||
-        betAmount <= 0
-    ) {
+    if (betAmount <= 0) {
 
-        alert(
-            "Bet amount सही डालें।"
-        );
+        alert("Bet amount सही डालें।");
 
         return;
+
     }
 
 
     if (betAmount > balance) {
 
-        alert(
-            "Demo balance पर्याप्त नहीं है।"
-        );
+        alert("Demo balance पर्याप्त नहीं है।");
 
         return;
+
     }
 
 
     balance -= betAmount;
 
-    updateBalance();
+    balanceEl.textContent = balance.toFixed(2);
 
     hasBet = true;
 
@@ -170,54 +156,50 @@ betBtn.addEventListener("click", () => {
     betBtn.disabled = true;
 
     statusEl.textContent =
-        "BET PLACED: ₹" +
-        betAmount.toFixed(2);
+        "BET PLACED: ₹" + betAmount;
+
 });
 
+
+// Cash out
 
 cashoutBtn.addEventListener("click", () => {
 
     if (!hasBet || !running) return;
 
 
-    const winnings =
-        betAmount * multiplier;
-
+    let winnings = betAmount * multiplier;
 
     balance += winnings;
 
-    updateBalance();
+    balanceEl.textContent = balance.toFixed(2);
 
 
     statusEl.textContent =
-        "CASHED OUT: ₹" +
-        winnings.toFixed(2);
+        "CASHED OUT: ₹" + winnings.toFixed(2);
 
 
     hasBet = false;
 
     cashoutBtn.disabled = true;
+
 });
 
+
+// Crash
 
 function crash() {
 
     running = false;
 
-    if (timer) {
-        clearInterval(timer);
-        timer = null;
-    }
-
+    clearInterval(timer);
 
     multiplierEl.textContent =
         multiplier.toFixed(2) + "x";
 
-
     statusEl.textContent =
         "💥 CRASHED AT " +
-        multiplier.toFixed(2) +
-        "x";
+        multiplier.toFixed(2) + "x";
 
 
     if (hasBet) {
@@ -225,15 +207,15 @@ function crash() {
         hasBet = false;
 
         cashoutBtn.disabled = true;
+
     }
 
 
-    setTimeout(() => {
-        startRound();
-    }, 3000);
+    setTimeout(startRound, 3000);
+
 }
 
 
-updateBalance();
+// Start
 
 startRound();
